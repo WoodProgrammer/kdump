@@ -1,7 +1,9 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"reflect"
 	"time"
@@ -65,12 +67,21 @@ func Retransmission() {
 }
 
 func ExportPrometheus() {
+
+	port := flag.String("port", "9000", "display colorized output")
+	flag.Parse()
+
+	log.Println("Starting metric server:", *port)
+
 	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":9000", nil)
+	portVal := ":" + *port
+	http.ListenAndServe(portVal, nil)
+
 }
 
 func main() {
 
 	go TcpMetricHandler()
+	go ExportPrometheus()
 	Retransmission()
 }

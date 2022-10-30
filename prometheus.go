@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/google/gopacket/layers"
@@ -10,10 +9,10 @@ import (
 )
 
 var (
-	tcpMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
-		Name: "tcp_metric",
-		Help: "TCP metrics that contains details and error type",
-	}, []string{"dstPort", "srcPort", "error", "srcHost"})
+	retranmissionMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "retransmission_metric",
+		Help: "TCP Retransmission metrics that contains details and error type",
+	}, []string{"dstPort", "srcPort"})
 )
 
 var tcpchan chan *layers.TCP
@@ -29,14 +28,9 @@ func TcpMetricHandler() {
 				payloadLength := uint32(len(tcpData.Payload))
 
 				if tcpData.Seq != ackItem[tcpData.Ack].NextSeqNumber {
-					fmt.Println("#######START#######")
-					fmt.Println("Next SeqNumber:", ackItem[tcpData.Ack].NextSeqNumber)
-					fmt.Println("Seq:", tcpData.Seq)
-					fmt.Println("Ack:", tcpData.Ack)
-					fmt.Println("Dict:", ackItem[tcpData.Ack])
-					fmt.Println("DataPayload:", uint32(len(tcpData.Payload)))
-					fmt.Println("#######END#######")
-
+					if ackItem[tcpData.Ack].Count != 0 {
+						retranmissionMetricCount.WithLabelValues(tcpData.DstPort.String(), tcpData.SrcPort.String()).Add(float64(ackItem[tcpData.Ack].Count))
+					}
 				} else {
 
 				}
