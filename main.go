@@ -28,11 +28,11 @@ type MetricMap struct {
 	tcp     *layers.TCP
 }
 
-func TcpStream() {
+func TcpStream(ninterface string) {
 
 	fmt.Println(reflect.TypeOf(ackItem))
 	bpffilter := "tcp"
-	handle, err := pcap.OpenLive("en0", 2048, false, -1*time.Second)
+	handle, err := pcap.OpenLive(ninterface, 2048, false, -1*time.Second)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -70,21 +70,23 @@ func TcpStream() {
 
 }
 
-func ExportPrometheus() {
+func ExportPrometheus(port string) {
 
-	port := flag.String("port", "7070", "display colorized output")
-	flag.Parse()
-
-	log.Println("Starting metric server:", *port)
+	log.Println("Starting metric server:", port)
 
 	http.Handle("/metrics", promhttp.Handler())
-	portVal := ":" + *port
-	http.ListenAndServe(portVal, nil)
+	portToRun := ":" + port
+	http.ListenAndServe(portToRun, nil)
 
 }
 
 func main() {
+	port := flag.String("port", "9090", "port to run")
+	ninterface := flag.String("interface", "en0", "interface identifier to sniff")
+
+	flag.Parse()
+
 	go RetransmissionHandler()
-	go ExportPrometheus()
-	TcpStream()
+	go ExportPrometheus(*port)
+	TcpStream(*ninterface)
 }
