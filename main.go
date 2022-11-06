@@ -28,11 +28,6 @@ type MetricMap struct {
 	tcp     *layers.TCP
 }
 
-func (s SequenceMap) setAckItem() {
-	s.Count = 0
-	s.DateTime = time.Now().UnixNano()
-}
-
 func TcpStream() {
 
 	fmt.Println(reflect.TypeOf(ackItem))
@@ -77,7 +72,7 @@ func TcpStream() {
 
 func ExportPrometheus() {
 
-	port := flag.String("port", "9000", "display colorized output")
+	port := flag.String("port", "7070", "display colorized output")
 	flag.Parse()
 
 	log.Println("Starting metric server:", *port)

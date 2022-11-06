@@ -1,0 +1,18 @@
+version: '3.2'
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    links:
+      - prometheus
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    restart: unless-stopped
+    ports:
+      - 9090:9090
