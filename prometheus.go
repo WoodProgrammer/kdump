@@ -13,9 +13,9 @@ var (
 		Help: "TCP Retransmission metrics that contains details and error type",
 	}, []string{"srcIp", "dstIp"})
 
-	resetMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
-		Name: "rst_metric",
-		Help: "TCP RST metrics that contains details and error type",
+	zerowindowMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "zerowindow_metric",
+		Help: "TCP Zero window metrics that contains details and error type",
 	}, []string{"srcIp", "dstIp"})
 )
 
@@ -29,6 +29,10 @@ func RetransmissionHandler() {
 		ipData := metricLaterData.ipLayer
 
 		if tcpData.Ack != 0 {
+			if tcpData.Window == 0 {
+
+				zerowindowMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(1.0)
+			}
 
 			if _, ok := ackItem[tcpData.Ack]; ok {
 				payloadLength := uint32(len(tcpData.Payload))
