@@ -23,12 +23,17 @@ type SequenceMap struct {
 	NextSeqNumber uint32
 }
 
+type MetricMap struct {
+	ipLayer *layers.IPv4
+	tcp     *layers.TCP
+}
+
 func (s SequenceMap) setAckItem() {
 	s.Count = 0
 	s.DateTime = time.Now().UnixNano()
 }
 
-func Retransmission() {
+func TcpStream() {
 
 	fmt.Println(reflect.TypeOf(ackItem))
 	bpffilter := "tcp"
@@ -53,6 +58,10 @@ func Retransmission() {
 		}
 
 		tcp, ok := tcpLayer.(*layers.TCP)
+		ip, ok := ipLayer.(*layers.IPv4)
+
+		metricData := MetricMap{ip, tcp}
+
 		if !ok {
 			continue
 		}
@@ -60,8 +69,8 @@ func Retransmission() {
 		if len(tcp.Payload) < 1 {
 			continue
 		}
-		tcpchan <- tcp
 
+		tcpchan <- &metricData
 	}
 
 }
@@ -80,8 +89,7 @@ func ExportPrometheus() {
 }
 
 func main() {
-
-	go TcpMetricHandler()
+	go RetransmissionHandler()
 	go ExportPrometheus()
-	Retransmission()
+	TcpStream()
 }

@@ -3,7 +3,6 @@ package main
 import (
 	"time"
 
-	"github.com/google/gopacket/layers"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -12,15 +11,22 @@ var (
 	retranmissionMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "retransmission_metric",
 		Help: "TCP Retransmission metrics that contains details and error type",
-	}, []string{"dstPort", "srcPort"})
+	}, []string{"srcIp", "dstIp"})
+
+	resetMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "rst_metric",
+		Help: "TCP RST metrics that contains details and error type",
+	}, []string{"srcIp", "dstIp"})
 )
 
-var tcpchan chan *layers.TCP
+var tcpchan chan *MetricMap
 
-func TcpMetricHandler() {
-	tcpchan = make(chan *layers.TCP, 100)
+func RetransmissionHandler() {
+	tcpchan = make(chan *MetricMap)
 
-	for tcpData := range tcpchan {
+	for metricLaterData := range tcpchan {
+		tcpData := metricLaterData.tcp
+		ipData := metricLaterData.ipLayer
 
 		if tcpData.Ack != 0 {
 
@@ -29,11 +35,12 @@ func TcpMetricHandler() {
 
 				if tcpData.Seq != ackItem[tcpData.Ack].NextSeqNumber {
 					if ackItem[tcpData.Ack].Count != 0 {
-						retranmissionMetricCount.WithLabelValues(tcpData.DstPort.String(), tcpData.SrcPort.String()).Add(float64(ackItem[tcpData.Ack].Count))
+						retranmissionMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(float64(ackItem[tcpData.Ack].Count))
 					}
 				} else {
 
 				}
+
 				ackPointer := ackItem[tcpData.Ack]
 				ackPointer.Count = ackPointer.Count + 1
 				ackPointer.AckNumber = tcpData.Ack
