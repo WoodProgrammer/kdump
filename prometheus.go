@@ -13,6 +13,11 @@ var (
 		Help: "TCP Retransmission metrics that contains details and error type",
 	}, []string{"srcIp", "dstIp"})
 
+	durationMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "duration_metric",
+		Help: "TCP Duration time period that contains details and error type",
+	}, []string{"srcIp", "dstIp"})
+
 	zerowindowMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "zerowindow_metric",
 		Help: "TCP Zero window metrics that contains details and error type",
@@ -29,9 +34,17 @@ func RetransmissionHandler() {
 		ipData := metricLaterData.ipLayer
 
 		if tcpData.Ack != 0 {
+
 			if tcpData.Window == 0 {
 
 				zerowindowMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(1.0)
+			}
+			currentDateTime := ackItem[tcpData.Seq].DateTime
+
+			duration := time.Nanosecond * time.Duration(time.Now().UnixNano()-currentDateTime)
+
+			if duration != 0 {
+				durationMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(float64(duration))
 			}
 
 			if _, ok := ackItem[tcpData.Ack]; ok {
@@ -40,7 +53,9 @@ func RetransmissionHandler() {
 				if tcpData.Seq != ackItem[tcpData.Ack].NextSeqNumber {
 					if ackItem[tcpData.Ack].Count != 0 {
 						retranmissionMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(float64(ackItem[tcpData.Ack].Count))
+
 					}
+
 				} else {
 
 				}
