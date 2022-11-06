@@ -35,4 +35,14 @@ retransmission_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 73
 ```
 
 ## Grafana Dashboard
+
 <img src="./img/dashboard.png"></img>
+
+
+## TODO;
+
+* Add more detailed metrics
+* Bytes to processed
+* K8S Daemonset
+* Controller
+* Better dashboard
