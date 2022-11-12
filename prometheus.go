@@ -18,6 +18,11 @@ var (
 		Help: "TCP Duration time period that contains details and error type",
 	}, []string{"srcIp", "dstIp"})
 
+	windowscaleMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "window_scale_metric",
+		Help: "WindowScale Detection",
+	}, []string{"srcIp", "dstIp"})
+
 	zerowindowMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "zerowindow_metric",
 		Help: "TCP Zero window metrics that contains details and error type",
@@ -27,18 +32,18 @@ var (
 var tcpchan chan *MetricMap
 
 func RetransmissionHandler() {
-	tcpchan = make(chan *MetricMap)
+	tcpchan = make(chan *MetricMap, 5000)
 
 	for metricLaterData := range tcpchan {
 		tcpData := metricLaterData.tcp
 		ipData := metricLaterData.ipLayer
 
 		if tcpData.Ack != 0 {
-
 			if tcpData.Window == 0 {
 
 				zerowindowMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(1.0)
 			}
+
 			currentDateTime := ackItem[tcpData.Seq].DateTime
 
 			duration := time.Nanosecond * time.Duration(time.Now().UnixNano()-currentDateTime)
@@ -63,6 +68,7 @@ func RetransmissionHandler() {
 				ackPointer := ackItem[tcpData.Ack]
 				ackPointer.Count = ackPointer.Count + 1
 				ackPointer.AckNumber = tcpData.Ack
+				ackPointer.WindowSize = tcpData.Window
 
 				ackPointer.NextSeqNumber = tcpData.Seq + payloadLength
 
@@ -71,9 +77,9 @@ func RetransmissionHandler() {
 			} else {
 				payloadLength := uint32(len(tcpData.Payload))
 				nextSeqNumber := tcpData.Seq + payloadLength
-				ackItem[tcpData.Ack] = SequenceMap{time.Now().UnixNano(), 0, tcpData.Seq, nextSeqNumber}
-			}
+				ackItem[tcpData.Ack] = SequenceMap{time.Now().UnixNano(), 0, tcpData.Seq, nextSeqNumber, tcpData.Window}
 
+			}
 		} else {
 			continue
 		}
