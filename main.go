@@ -59,9 +59,13 @@ func TcpStream(ninterface string) {
 		for _, val := range tcp.Options {
 
 			if val.OptionType.String() == "WindowScale" {
-				fmt.Println("windowScale")
 				windowscaleMetricCount.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
 			}
+		}
+
+		if tcp.RST == true {
+			rstMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+
 		}
 
 		metricData := MetricMap{ip, tcp}
@@ -75,6 +79,7 @@ func TcpStream(ninterface string) {
 		}
 
 		tcpchan <- &metricData
+
 	}
 
 }
