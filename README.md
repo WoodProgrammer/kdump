@@ -43,6 +43,10 @@ zerowindow_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 0.0
 
 ## Grafana Dashboard
 
+This is the example view of the Grafana `dashboard` of this project you can check the json model of the `grafana` dashboard under `dashboard` directory.
+
+
+<img src="./img/dashboard.png"></img>
 
 
 ## TODO;
