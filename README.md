@@ -21,7 +21,9 @@ Metrics example this metric exporter works like that;
     popd
 ```
 
-After you build and run this application it will start to produce metrics like that
+After you build and run this application it will start to produce metrics like that;
+
+# List of the Metrics
 
 ```sh
 # TYPE duration_metric counter
@@ -30,13 +32,17 @@ duration_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 3.0313016523275
 ..
 .
 # TYPE retransmission_metric counter
-retransmission_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 73
+retransmission_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 12
+window_scale_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 5.0
+rst_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 3.0
+ip_df_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 1.2
+zerowindow_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 0.0
+
 
 ```
 
 ## Grafana Dashboard
 
-<img src="./img/dashboard.png"></img>
 
 
 ## TODO;
