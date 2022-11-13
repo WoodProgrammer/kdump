@@ -28,6 +28,11 @@ var (
 		Help: "TCP RST metrics that contains details and error type",
 	}, []string{"srcIp", "dstIp"})
 
+	dfMetric = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "ip_df_metric",
+		Help: "Ip layer do not fragment metric",
+	}, []string{"srcIp", "dstIp"})
+
 	zerowindowMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "zerowindow_metric",
 		Help: "TCP Zero window metrics that contains details and error type",
