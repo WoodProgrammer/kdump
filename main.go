@@ -56,6 +56,10 @@ func TcpStream(ninterface string) {
 		tcp, ok := tcpLayer.(*layers.TCP)
 		ip, ok := ipLayer.(*layers.IPv4)
 
+		if ip.Flags.String() == "DF" {
+			dfMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+		}
+
 		for _, val := range tcp.Options {
 
 			if val.OptionType.String() == "WindowScale" {
