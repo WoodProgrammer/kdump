@@ -33,6 +33,21 @@ var (
 		Help: "Ip layer do not fragment metric",
 	}, []string{"srcIp", "dstIp"})
 
+	ipPacketSize = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "ip_packet_size",
+		Help: "Size of the ip package during timeline",
+	}, []string{})
+
+	tcpPacketSize = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "tcp_packet_size",
+		Help: "Size of the tcp packet at all",
+	}, []string{})
+
+	packageCount = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "packageCount",
+		Help: "Count of the package that received",
+	}, []string{})
+
 	zerowindowMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "zerowindow_metric",
 		Help: "TCP Zero window metrics that contains details and error type",
