@@ -47,7 +47,7 @@ func TcpStream(ninterface string) {
 
 		ipLayer := packet.Layer(layers.LayerTypeIPv4)
 
-		packageCount.WithLabelValues().Add(1.0) // count of the package that we received
+		packetCount.WithLabelValues().Add(1.0) // count of the package that we received
 
 		if ipLayer == nil {
 			continue

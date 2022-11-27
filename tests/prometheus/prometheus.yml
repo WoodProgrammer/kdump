@@ -26,4 +26,4 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ["192.168.226.123:7070"]
+      - targets: ["192.168.246.123:7070"]

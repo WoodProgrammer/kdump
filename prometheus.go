@@ -43,8 +43,8 @@ var (
 		Help: "Size of the tcp packet at all",
 	}, []string{})
 
-	packageCount = promauto.NewCounterVec(prometheus.CounterOpts{
-		Name: "packageCount",
+	packetCount = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "packet_count",
 		Help: "Count of the package that received",
 	}, []string{})
 
