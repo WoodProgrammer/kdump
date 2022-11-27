@@ -43,7 +43,12 @@ func TcpStream(ninterface string) {
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
 	for packet := range packetSource.Packets() {
+		fmt.Println("Packet ", packet.Data())
+
 		ipLayer := packet.Layer(layers.LayerTypeIPv4)
+
+		packetCount.WithLabelValues().Add(1.0) // count of the package that we received
+
 		if ipLayer == nil {
 			continue
 		}
@@ -54,6 +59,7 @@ func TcpStream(ninterface string) {
 		}
 
 		tcp, ok := tcpLayer.(*layers.TCP)
+
 		ip, ok := ipLayer.(*layers.IPv4)
 
 		if ip.Flags.String() == "DF" {
@@ -81,6 +87,10 @@ func TcpStream(ninterface string) {
 		if len(tcp.Payload) < 1 {
 			continue
 		}
+
+		ipPacketSize.WithLabelValues().Add(float64(len(ip.Payload)))
+
+		tcpPacketSize.WithLabelValues().Add(float64(len(tcp.Payload)))
 
 		tcpchan <- &metricData
 
