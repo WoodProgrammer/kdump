@@ -1,10 +1,8 @@
 # binocular
 
-This is a project that contains important tcp metrics shown at below;
+This is a project that contains important tcp metrics like Retransmission, window scale, rst, ip_defragmentation ..etc 
 
-* TCP Retransmission
-* TCP ZeroWindow
-* TCP Duration metrics
+You are able to run this metric exporter in all the components which is interacting with network in anyhow.
 
 This metric exporter is responsible to listen interfaces on the workload and produce metrics based on the analysis.
 
@@ -15,9 +13,9 @@ Metrics example this metric exporter works like that;
 ```sh
     #!/bin/bash
 
-    pushd binocular 
+    pushd tcp-exporter
         go build .
-        ./tcpdump_exporter -p 9090 -i eni-123123
+        ./tcpdump_exporter -p 9090 -i eni-123123 -f tcp
     popd
 ```
 
@@ -37,8 +35,9 @@ window_scale_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 5.0
 rst_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 3.0
 ip_df_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 1.2
 zerowindow_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 0.0
-
-
+ip_packet_size{}
+tcp_packet_size{}
+packet_count{}
 ```
 
 ## Grafana Dashboard
@@ -51,8 +50,6 @@ This is the example view of the Grafana `dashboard` of this project you can chec
 
 ## TODO;
 
-* Add more detailed metrics
-* Bytes to processed
 * K8S Daemonset
 * Controller
 * Better dashboard
