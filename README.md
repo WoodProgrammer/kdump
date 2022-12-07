@@ -1,4 +1,4 @@
-# binocular
+# tcp-exporter
 
 This is a project that contains important tcp metrics like Retransmission, window scale, rst, ip_defragmentation ..etc 
 
@@ -36,7 +36,7 @@ rst_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 3.0
 ip_df_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 1.2
 zerowindow_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 0.0
 ip_packet_size{}
-tcp_packet_size{}
+tcp_packet_size{g}
 packet_count{}
 ```
 
