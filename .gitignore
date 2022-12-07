@@ -31,4 +31,5 @@ go.work
 /vendor/
 /Godeps/
 
+**tcpdump_exporter**
 # End of https://www.toptal.com/developers/gitignore/api/go

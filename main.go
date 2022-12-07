@@ -29,10 +29,10 @@ type MetricMap struct {
 	tcp     *layers.TCP
 }
 
-func TcpStream(ninterface string) {
+func TcpStream(ninterface string, filter string) {
 
 	fmt.Println(reflect.TypeOf(ackItem))
-	bpffilter := "tcp"
+	bpffilter := filter
 	handle, err := pcap.OpenLive(ninterface, 2048, false, -1*time.Second)
 	if err != nil {
 		fmt.Println(err)
@@ -98,9 +98,10 @@ func TcpStream(ninterface string) {
 
 }
 
-func ExportPrometheus(port string) {
+func ExportPrometheus(port string, filter string) {
 
 	log.Println("Starting metric server:", port)
+	log.Println("Bpf filter to run:", filter)
 
 	http.Handle("/metrics", promhttp.Handler())
 	portToRun := ":" + port
@@ -111,10 +112,11 @@ func ExportPrometheus(port string) {
 func main() {
 	port := flag.String("port", "9090", "port to run")
 	ninterface := flag.String("interface", "en0", "interface identifier to sniff")
+	filter := flag.String("filter", "tcp", "Definition of filter to run")
 
 	flag.Parse()
 
 	go RetransmissionHandler()
-	go ExportPrometheus(*port)
-	TcpStream(*ninterface)
+	go ExportPrometheus(*port, *filter)
+	TcpStream(*ninterface, *filter)
 }
