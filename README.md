@@ -6,7 +6,29 @@ You are able to run this metric exporter in all the components which is interact
 
 This metric exporter is responsible to listen interfaces on the workload and produce metrics based on the analysis.
 
-## Prometheus Metrics
+**Table of Contents**
+
+- [How to deploy](#how-to-deploy)
+- [Prometheus Metrics](#prometheus-metrics)
+    - [List of Metrics](#list-of-metrics)
+    - [Grafana Dashboard](#grafana-dashboard)
+
+
+## How to deploy
+
+### Kubernetes
+
+To deploy this tcp exporter you can follow up these commands show at below;
+
+```sh
+
+    pushd k8s
+        helm upgrade -i <RELEASE-NAME> -f values.yaml .
+    popd
+
+```
+
+## Prometheus Metrics
 
 Metrics example this metric exporter works like that;
 
@@ -21,7 +43,7 @@ Metrics example this metric exporter works like that;
 
 After you build and run this application it will start to produce metrics like that;
 
-# List of the Metrics
+### List of the Metrics
 
 ```sh
 # TYPE duration_metric counter
@@ -40,7 +62,7 @@ tcp_packet_size{g}
 packet_count{}
 ```
 
-## Grafana Dashboard
+### Grafana Dashboard
 
 This is the example view of the Grafana `dashboard` of this project you can check the json model of the `grafana` dashboard under `dashboard` directory.
 

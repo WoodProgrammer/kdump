@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/google/gopacket"
@@ -29,11 +28,19 @@ type MetricMap struct {
 	tcp     *layers.TCP
 }
 
-func TcpStream(ninterface string, filter string) {
+func TcpStream(device string, filter string) {
+	var devicePrefix string
 
-	fmt.Println(reflect.TypeOf(ackItem))
 	bpffilter := filter
-	handle, err := pcap.OpenLive(ninterface, 2048, false, -1*time.Second)
+
+	if device == "" {
+		devicePrefix = "any"
+	} else {
+		devicePrefix = device
+	}
+
+	log.Println("Device to listen is ", devicePrefix)
+	handle, err := pcap.OpenLive(devicePrefix, 2048, false, -1*time.Second)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -111,12 +118,12 @@ func ExportPrometheus(port string, filter string) {
 
 func main() {
 	port := flag.String("port", "9090", "port to run")
-	ninterface := flag.String("interface", "en0", "interface identifier to sniff")
+	device := flag.String("device", "", "interface identifier to sniff")
 	filter := flag.String("filter", "tcp", "Definition of filter to run")
 
 	flag.Parse()
 
 	go RetransmissionHandler()
 	go ExportPrometheus(*port, *filter)
-	TcpStream(*ninterface, *filter)
+	TcpStream(*device, *filter)
 }
