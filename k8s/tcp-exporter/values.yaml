@@ -3,10 +3,10 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: emirozbir/tcp-exporter:0.0.1 ## warning not-exist-yet :))
+  repository: emirozbir/tcp-exporter ## warning not-exist-yet :))
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "0.0.1"
 
 imagePullSecrets: []
 nameOverride: ""
