@@ -16,4 +16,3 @@ spec:
   selector:
     matchLabels:
       {{- include "tcp-exporter.selectorLabels" . | nindent 6 }}
-      
