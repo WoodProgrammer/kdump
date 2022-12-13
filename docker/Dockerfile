@@ -13,8 +13,4 @@ COPY *.go ./
 
 RUN go build -o /tcpdump_exporter .
 
-## based on the debugging requirements you can feel free to move scratch image to debian ... etc
-FROM scratch 
-COPY --from=builder /tcpdump_exporter .
-
 CMD [ "/tcpdump_exporter" ]
