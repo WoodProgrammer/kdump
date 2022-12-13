@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"reflect"
-	"time"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -25,15 +23,30 @@ type SequenceMap struct {
 }
 
 type MetricMap struct {
-	ipLayer *layers.IPv4
-	tcp     *layers.TCP
+	ipLayer    *layers.IPv4
+	tcp        *layers.TCP
+	deviceName string
 }
 
-func TcpStream(ninterface string, filter string) {
+func TcpStream(device string, filter string) {
+	var devicePrefix string
 
-	fmt.Println(reflect.TypeOf(ackItem))
 	bpffilter := filter
-	handle, err := pcap.OpenLive(ninterface, 2048, false, -1*time.Second)
+	rootDeviceList, err := pcap.FindAllDevs()
+
+	if err != nil {
+		panic(err)
+	}
+
+	if device == "" {
+		devicePrefix = "any"
+
+	} else {
+		devicePrefix = device
+	}
+
+	log.Println("Device to listen is ", devicePrefix)
+	handle, err := pcap.OpenLive(devicePrefix, 2048, true, pcap.BlockForever)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -43,11 +56,13 @@ func TcpStream(ninterface string, filter string) {
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
 	for packet := range packetSource.Packets() {
-		fmt.Println("Packet ", packet.Data())
+		index := packet.Metadata().InterfaceIndex
+
+		detectedDeviceName := rootDeviceList[index].Name
 
 		ipLayer := packet.Layer(layers.LayerTypeIPv4)
 
-		packetCount.WithLabelValues().Add(1.0) // count of the package that we received
+		packetCount.WithLabelValues(detectedDeviceName).Add(1.0) // count of the package that we received
 
 		if ipLayer == nil {
 			continue
@@ -63,22 +78,22 @@ func TcpStream(ninterface string, filter string) {
 		ip, ok := ipLayer.(*layers.IPv4)
 
 		if ip.Flags.String() == "DF" {
-			dfMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+			dfMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String(), detectedDeviceName).Add(1.0)
 		}
 
 		for _, val := range tcp.Options {
 
 			if val.OptionType.String() == "WindowScale" {
-				windowscaleMetricCount.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+				windowscaleMetricCount.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String(), detectedDeviceName).Add(1.0)
 			}
 		}
 
 		if tcp.RST == true {
-			rstMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+			rstMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String(), detectedDeviceName).Add(1.0)
 
 		}
 
-		metricData := MetricMap{ip, tcp}
+		metricData := MetricMap{ip, tcp, detectedDeviceName}
 
 		if !ok {
 			continue
@@ -88,9 +103,9 @@ func TcpStream(ninterface string, filter string) {
 			continue
 		}
 
-		ipPacketSize.WithLabelValues().Add(float64(len(ip.Payload)))
+		ipPacketSize.WithLabelValues(detectedDeviceName).Add(float64(len(ip.Payload)))
 
-		tcpPacketSize.WithLabelValues().Add(float64(len(tcp.Payload)))
+		tcpPacketSize.WithLabelValues(detectedDeviceName).Add(float64(len(tcp.Payload)))
 
 		tcpchan <- &metricData
 
@@ -111,12 +126,12 @@ func ExportPrometheus(port string, filter string) {
 
 func main() {
 	port := flag.String("port", "9090", "port to run")
-	ninterface := flag.String("interface", "en0", "interface identifier to sniff")
+	device := flag.String("device", "", "interface identifier to sniff")
 	filter := flag.String("filter", "tcp", "Definition of filter to run")
 
 	flag.Parse()
 
 	go RetransmissionHandler()
 	go ExportPrometheus(*port, *filter)
-	TcpStream(*ninterface, *filter)
+	TcpStream(*device, *filter)
 }

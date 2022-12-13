@@ -1,0 +1,39 @@
+# Default values for tcp-exporter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+image:
+  repository: emirozbir/tcp-exporter ## warning not-exist-yet :))
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.0.1"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 9090
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

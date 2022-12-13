@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    {{- include "tcp-exporter.selectorLabels" . | nindent 4 }}
+  name: {{ include "tcp-exporter.fullname" . }}
+spec:
+  endpoints:
+  - interval: 5s
+    path: /metrics
+    targetPort: {{ .Values.service.port }}
+  namespaceSelector:
+    matchNames:
+    - {{.Release.Namespace}}
+  jobLabel: tcp-exporter
+  selector:
+    matchLabels:
+      {{- include "tcp-exporter.selectorLabels" . | nindent 6 }}
