@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -24,23 +23,30 @@ type SequenceMap struct {
 }
 
 type MetricMap struct {
-	ipLayer *layers.IPv4
-	tcp     *layers.TCP
+	ipLayer    *layers.IPv4
+	tcp        *layers.TCP
+	deviceName string
 }
 
 func TcpStream(device string, filter string) {
 	var devicePrefix string
 
 	bpffilter := filter
+	rootDeviceList, err := pcap.FindAllDevs()
+
+	if err != nil {
+		panic(err)
+	}
 
 	if device == "" {
 		devicePrefix = "any"
+
 	} else {
 		devicePrefix = device
 	}
 
 	log.Println("Device to listen is ", devicePrefix)
-	handle, err := pcap.OpenLive(devicePrefix, 2048, false, -1*time.Second)
+	handle, err := pcap.OpenLive(devicePrefix, 2048, true, pcap.BlockForever)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -50,11 +56,13 @@ func TcpStream(device string, filter string) {
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
 	for packet := range packetSource.Packets() {
-		fmt.Println("Packet ", packet.Data())
+		index := packet.Metadata().InterfaceIndex
+
+		detectedDeviceName := rootDeviceList[index].Name
 
 		ipLayer := packet.Layer(layers.LayerTypeIPv4)
 
-		packetCount.WithLabelValues().Add(1.0) // count of the package that we received
+		packetCount.WithLabelValues(detectedDeviceName).Add(1.0) // count of the package that we received
 
 		if ipLayer == nil {
 			continue
@@ -70,22 +78,22 @@ func TcpStream(device string, filter string) {
 		ip, ok := ipLayer.(*layers.IPv4)
 
 		if ip.Flags.String() == "DF" {
-			dfMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+			dfMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String(), detectedDeviceName).Add(1.0)
 		}
 
 		for _, val := range tcp.Options {
 
 			if val.OptionType.String() == "WindowScale" {
-				windowscaleMetricCount.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+				windowscaleMetricCount.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String(), detectedDeviceName).Add(1.0)
 			}
 		}
 
 		if tcp.RST == true {
-			rstMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String()).Add(1.0)
+			rstMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String(), detectedDeviceName).Add(1.0)
 
 		}
 
-		metricData := MetricMap{ip, tcp}
+		metricData := MetricMap{ip, tcp, detectedDeviceName}
 
 		if !ok {
 			continue
@@ -95,9 +103,9 @@ func TcpStream(device string, filter string) {
 			continue
 		}
 
-		ipPacketSize.WithLabelValues().Add(float64(len(ip.Payload)))
+		ipPacketSize.WithLabelValues(detectedDeviceName).Add(float64(len(ip.Payload)))
 
-		tcpPacketSize.WithLabelValues().Add(float64(len(tcp.Payload)))
+		tcpPacketSize.WithLabelValues(detectedDeviceName).Add(float64(len(tcp.Payload)))
 
 		tcpchan <- &metricData
 

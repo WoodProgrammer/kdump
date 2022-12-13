@@ -11,47 +11,47 @@ var (
 	retranmissionMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "retransmission_metric",
 		Help: "TCP Retransmission metrics that contains details and error type",
-	}, []string{"srcIp", "dstIp"})
+	}, []string{"srcIp", "dstIp", "deviceName"})
 
 	durationMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "duration_metric",
 		Help: "TCP Duration time period that contains details and error type",
-	}, []string{"srcIp", "dstIp"})
+	}, []string{"srcIp", "dstIp", "deviceName"})
 
 	windowscaleMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "window_scale_metric",
 		Help: "WindowScale Detection",
-	}, []string{"srcIp", "dstIp"})
+	}, []string{"srcIp", "dstIp", "deviceName"})
 
 	rstMetric = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "rst_metric",
 		Help: "TCP RST metrics that contains details and error type",
-	}, []string{"srcIp", "dstIp"})
+	}, []string{"srcIp", "dstIp", "deviceName"})
 
 	dfMetric = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "ip_df_metric",
 		Help: "Ip layer do not fragment metric",
-	}, []string{"srcIp", "dstIp"})
+	}, []string{"srcIp", "dstIp", "deviceName"})
 
 	ipPacketSize = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "ip_packet_size",
 		Help: "Size of the ip package during timeline",
-	}, []string{})
+	}, []string{"deviceName"})
 
 	tcpPacketSize = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "tcp_packet_size",
 		Help: "Size of the tcp packet at all",
-	}, []string{})
+	}, []string{"deviceName"})
 
 	packetCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "packet_count",
 		Help: "Count of the package that received",
-	}, []string{})
+	}, []string{"deviceName"})
 
 	zerowindowMetricCount = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "zerowindow_metric",
 		Help: "TCP Zero window metrics that contains details and error type",
-	}, []string{"srcIp", "dstIp"})
+	}, []string{"srcIp", "dstIp", "deviceName"})
 )
 
 var tcpchan chan *MetricMap
@@ -62,6 +62,7 @@ func RetransmissionHandler() {
 	for metricLaterData := range tcpchan {
 		tcpData := metricLaterData.tcp
 		ipData := metricLaterData.ipLayer
+		deviceName := metricLaterData.deviceName
 
 		if tcpData.Ack != 0 {
 			if tcpData.Window == 0 {
@@ -74,7 +75,7 @@ func RetransmissionHandler() {
 			duration := time.Nanosecond * time.Duration(time.Now().UnixNano()-currentDateTime)
 
 			if duration != 0 {
-				durationMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(float64(duration))
+				durationMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String(), deviceName).Add(float64(duration))
 			}
 
 			if _, ok := ackItem[tcpData.Ack]; ok {
@@ -82,7 +83,7 @@ func RetransmissionHandler() {
 
 				if tcpData.Seq != ackItem[tcpData.Ack].NextSeqNumber {
 					if ackItem[tcpData.Ack].Count != 0 {
-						retranmissionMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String()).Add(float64(ackItem[tcpData.Ack].Count))
+						retranmissionMetricCount.WithLabelValues(ipData.SrcIP.String(), ipData.DstIP.String(), deviceName).Add(float64(ackItem[tcpData.Ack].Count))
 
 					}
 
