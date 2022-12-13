@@ -33,6 +33,7 @@ This helm chart deploy a daemonset which is running in `hostNetwork: true` mode.
 
 <img src="./img/design.png"></img>
 
+As you can see the illustrated images this daemonsets fetches all the pcap data of each interface as you can image each data processing by the tcp-exporter and it produce analys for each pod interface and ip traffic as well.
 
 ## Prometheus Metrics
 
