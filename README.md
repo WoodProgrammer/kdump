@@ -27,6 +27,12 @@ To deploy this tcp exporter you can follow up these commands show at below;
     popd
 
 ```
+This helm chart deploy a daemonset which is running in `hostNetwork: true` mode.This allows us to track all the activities of the interfaces in and out cluster connectivity. 
+
+## Concept
+
+<img src="./img/design.png"></img>
+
 
 ## Prometheus Metrics
 
@@ -52,14 +58,14 @@ duration_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 3.0313016523275
 ..
 .
 # TYPE retransmission_metric counter
-retransmission_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 12
-window_scale_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 5.0
-rst_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 3.0
-ip_df_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 1.2
-zerowindow_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>"} 0.0
-ip_packet_size{}
-tcp_packet_size{g}
-packet_count{}
+retransmission_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>",deviceName="<<NET_DEVICE_NAME>>" } 12
+window_scale_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>", deviceName="<<NET_DEVICE_NAME>>",} 5.0
+rst_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>", deviceName="<<NET_DEVICE_NAME>>",} 3.0
+ip_df_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>", deviceName="<<NET_DEVICE_NAME>>",} 1.2
+zerowindow_metric{dstIp="<<DST_IP_ADDR>>",srcIp="<<SRC_IP_ADDR>>", deviceName="<<NET_DEVICE_NAME>>",} 0.0
+ip_packet_size{deviceName="<<NET_DEVICE_NAME>>",}
+tcp_packet_size{deviceName="<<NET_DEVICE_NAME>>",}
+packet_count{deviceName="<<NET_DEVICE_NAME>>",}
 ```
 
 ### Grafana Dashboard
