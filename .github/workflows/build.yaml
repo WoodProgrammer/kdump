@@ -11,9 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: GatherCommitSHA
-          run: |
-            export IMAGE_TAG=$(git rev-parse --short HEAD)
-            echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
+        id: init
+        run: |
+          export IMAGE_TAG=$(git rev-parse --short HEAD)
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    outputs:
+      image_tag: ${{ steps.init.outputs.IMAGE_TAG }}
+
   docker:
     runs-on: ubuntu-latest
     needs: [init]
@@ -39,5 +44,5 @@ jobs:
           push: true
           tags: |
             emirozbir/tcp-exporter:latest
-            emirozbir/tcp-exporter:${{needs.init.outputs.IMAGE_TAG}}
+            emirozbir/tcp-exporter:${{needs.init.outputs.image_tag}}
           
