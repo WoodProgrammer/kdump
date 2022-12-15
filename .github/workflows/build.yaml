@@ -3,7 +3,6 @@ name: BuildPipeline
 on:
   push:
     branches:
-      - "build-pipeline"
       - "pre-release"
       - "master"
 
