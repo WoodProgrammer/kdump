@@ -1,5 +1,7 @@
 # tcp-exporter
 
+![example event parameter](https://github.com/WoodProgrammer/tcp-exporter/actions/workflows/build.yaml/badge.svg?event=push)
+
 This is a project that contains important tcp metrics like Retransmission, window scale, rst, ip_defragmentation ..etc 
 
 You are able to run this metric exporter in all the components which is interacting with network in anyhow.
