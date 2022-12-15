@@ -81,6 +81,5 @@ This is the example view of the Grafana `dashboard` of this project you can chec
 
 ## TODO;
 
-* K8S Daemonset
 * Controller
 * Better dashboard
