@@ -36,5 +36,5 @@ jobs:
           push: true
           tags: |
             emirozbir/tcp-exporter:latest
-            emirozbir/tcp-exporter:{{outputs.IMAGE_TAG}}
+            emirozbir/tcp-exporter:${{outputs.IMAGE_TAG}}
           
