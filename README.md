@@ -83,3 +83,7 @@ This is the example view of the Grafana `dashboard` of this project you can chec
 
 * Controller
 * Better dashboard
+
+## Contribution
+
+All the feature and hotfix branches must to have get merged in `pre-release` branch after it get approval the changes can proceed to the `master` branch
