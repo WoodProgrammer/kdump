@@ -76,9 +76,9 @@ func TcpStream(device string, filter string) {
 		tcp, ok := tcpLayer.(*layers.TCP)
 
 		ip, ok := ipLayer.(*layers.IPv4)
-
-		if ip.Flags.String() == "DF" {
-			dfMetric.WithLabelValues(ip.SrcIP.String(), ip.DstIP.String(), detectedDeviceName).Add(1.0)
+		if ip.Flags&layers.IPv4DontFragment != 0 {
+			pktSize := len(ip.Payload) + 20 // IP header
+			dfPacketSizeHistogram.WithLabelValues(detectedDeviceName).Observe(float64(pktSize))
 		}
 
 		for _, val := range tcp.Options {

@@ -28,6 +28,12 @@ var (
 		Help: "TCP RST metrics that contains details and error type",
 	}, []string{"srcIp", "dstIp", "deviceName"})
 
+	dfPacketSizeHistogram = promauto.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "ip_df_packet_size_bytes",
+		Help:    "Size distribution of IP packets with DF flag set",
+		Buckets: []float64{576, 1280, 1400, 1420, 1450, 1472, 1480, 1500, 1505, 9000},
+	}, []string{"device"})
+
 	dfMetric = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "ip_df_metric",
 		Help: "Ip layer do not fragment metric",
