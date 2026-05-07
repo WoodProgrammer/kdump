@@ -24,14 +24,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 0,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -44,7 +42,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -67,6 +65,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -74,14 +73,15 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "packet_count{job=\"tcp-exporter\"}",
@@ -95,8 +95,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -104,11 +103,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -117,6 +118,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -124,6 +126,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -139,7 +142,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -165,15 +168,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "ip_packet_size{job=\"tcp-exporter\"}",
@@ -182,13 +186,12 @@
           "refId": "A"
         }
       ],
-      "title": "Packet Process in IpLayer [byte]",
+      "title": "Packet Process in IpLayer [byte]",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -196,11 +199,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -209,6 +214,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -216,6 +222,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -231,7 +238,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -257,15 +264,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "tcp_packet_size{job=\"tcp-exporter\"}",
@@ -279,8 +287,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -288,11 +295,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -301,6 +310,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -308,6 +318,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -323,7 +334,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -349,15 +360,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "zerowindow_metric{job=\"tcp-exporter\"}",
@@ -371,8 +383,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -380,11 +391,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -393,6 +406,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -400,6 +414,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -415,7 +430,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -441,15 +456,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "irate(duration_metric{job=\"tcp-exporter\"}[5m])",
@@ -463,8 +479,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "description": "",
       "fieldConfig": {
@@ -473,11 +488,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -486,6 +503,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -493,6 +511,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -508,7 +527,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -517,7 +536,32 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "{container=\"tcp-exporter\", deviceName=\"eth0\", dstIp=\"10.1.0.5\", endpoint=\"9090\", instance=\"10.1.0.5:9090\", job=\"tcp-exporter\", namespace=\"kube-system\", pod=\"tcp-exporter-kzf4h\", service=\"tcp-exporter\", srcIp=\"20.52.226.160\"}"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -534,15 +578,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "rate(retransmission_metric{job=\"tcp-exporter\"}[5m])",
@@ -552,8 +597,7 @@
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "hide": false,
           "refId": "B"
@@ -564,8 +608,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -573,11 +616,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -586,6 +631,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -593,6 +639,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -608,7 +655,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -634,15 +681,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "rate(window_scale_metric{job=\"tcp-exporter\"}[5m])",
@@ -656,8 +704,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -665,11 +712,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -678,6 +727,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -685,6 +735,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -700,7 +751,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -726,15 +777,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "rate(window_scale_metric{job=\"tcp-exporter\"}[5m])",
@@ -748,8 +800,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "1agfUvvVk"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -757,11 +808,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -770,6 +823,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -777,6 +831,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -792,7 +847,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -818,15 +873,16 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "1agfUvvVk"
+            "type": "prometheus"
           },
           "editorMode": "code",
           "expr": "rst_metric{job=\"tcp-expoter\"}",
@@ -839,8 +895,9 @@
       "type": "timeseries"
     }
   ],
-  "schemaVersion": 37,
-  "style": "dark",
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
   "tags": [],
   "templating": {
     "list": []
@@ -853,6 +910,5 @@
   "timezone": "",
   "title": "TCPMetrics",
   "uid": "ek86UvD4z",
-  "version": 7,
-  "weekStart": ""
+  "version": 12
 }
